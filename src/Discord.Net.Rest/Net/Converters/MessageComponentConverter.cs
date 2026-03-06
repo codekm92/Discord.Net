@@ -62,8 +62,15 @@ namespace Discord.Net.Converters
                 case ComponentType.Container:
                     messageComponent = new API.ContainerComponent();
                     break;
+                case ComponentType.Label:
+                    messageComponent = new API.LabelComponent();
+                    break;
+                case ComponentType.FileUpload:
+                    messageComponent = new API.FileUploadComponent();
+                    break;
                 default:
-                    throw new JsonSerializationException($"Unknown component type value '{typeProperty}' while deserializing message component");
+                    messageComponent = new API.UnknownComponent { RawType = typeProperty, RawJson = jsonObject.ToString() };
+                    break;
             }
             serializer.Populate(jsonObject.CreateReader(), messageComponent);
             return messageComponent;
